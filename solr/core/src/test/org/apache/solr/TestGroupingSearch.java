@@ -969,6 +969,15 @@ public class TestGroupingSearch extends SolrTestCaseJ4 {
     
   }
 
+  @Test
+  public void testGroupWithFl() {
+    createIndex();
+    assertQ(req("fq","*:*",  "q","*:*"+f2, "group","true", "group.field", f)
+            ,"/response/lst[@name='grouped']/lst[@name='"+FOO_STRING_FIELD+"']/arr[@name='groups']/lst[1]/result[@numFoundExact='true']"
+    );
+  }
+
+
   public static Object buildGroupedResult(IndexSchema schema, List<Grp> sortedGroups, int start, int rows, int group_offset, int group_limit, boolean includeNGroups) {
     Map<String,Object> result = new LinkedHashMap<>();
 
