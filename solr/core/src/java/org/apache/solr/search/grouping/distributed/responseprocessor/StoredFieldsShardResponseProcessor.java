@@ -37,7 +37,10 @@ public class StoredFieldsShardResponseProcessor implements ShardResponseProcesso
     ShardResponse srsp = shardRequest.responses.get(0);
     SolrDocumentList docs = (SolrDocumentList)srsp.getSolrResponse().getResponse().get("response");
     String uniqueIdFieldName = rb.req.getSchema().getUniqueKeyField().getName();
-
+    if (rb.rsp.getReturnFields().getFieldRenames().get(uniqueIdFieldName) != null) {
+      // if id was renamed we need to use the new name
+      uniqueIdFieldName = rb.rsp.getReturnFields().getFieldRenames().get(uniqueIdFieldName);
+    }
     for (SolrDocument doc : docs) {
       Object id = doc.getFieldValue(uniqueIdFieldName).toString();
       ShardDoc shardDoc = rb.resultIds.get(id);
