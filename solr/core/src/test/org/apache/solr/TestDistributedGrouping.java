@@ -192,7 +192,9 @@ public class TestDistributedGrouping extends BaseDistributedSearchTestCase {
 
     query("q", "*:*", "fl", "id," + i1dv, "group", "true", "group.field", i1dv, "group.limit", 10, "sort", i1 + " asc, id asc");
 
-    
+    // SOLR-1234: if id was renamed we need to use the new name
+    query("q", "*:*", "rows", 100, "fl", "aliasId:id," + i1, "group", "true", "group.field", i1, "group.limit", -1, "sort", i1 + " asc, id asc");
+
     // SOLR-4150: what if group.query has no matches, 
     // or only matches on one shard
     query("q", "*:*", "rows", 100, "fl", "id," + i1, "group", "true",
