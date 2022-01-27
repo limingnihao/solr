@@ -196,7 +196,7 @@ public class AddReplicaCmd implements CollApiCmds.CollectionApiCommand {
         .collect(Collectors.toList());
   }
 
-  private ModifiableSolrParams getReplicaParams(ZkNodeProps message, String collectionName, DocCollection coll, boolean skipCreateReplicaInClusterState, CreateReplica createReplica) throws InterruptedException, KeeperException {
+    private ModifiableSolrParams getReplicaParams(ZkNodeProps message, String collectionName, DocCollection coll, boolean skipCreateReplicaInClusterState, CreateReplica createReplica) throws InterruptedException, KeeperException {
     ZkStateReader zkStateReader = ccc.getZkStateReader();
     if (!skipCreateReplicaInClusterState) {
       ZkNodeProps props = new ZkNodeProps(
@@ -237,6 +237,7 @@ public class AddReplicaCmd implements CollApiCmds.CollectionApiCommand {
     params.set(COLL_CONF, configName);
     params.set(CoreAdminParams.COLLECTION, collectionName);
     params.set(CoreAdminParams.REPLICA_TYPE, createReplica.replicaType.name());
+    params.set(ZkStateReader.NUM_SHARDS_PROP, coll.getSlices().size());
     if (createReplica.sliceName != null) {
       params.set(CoreAdminParams.SHARD, createReplica.sliceName);
     } else if (routeKey != null) {
