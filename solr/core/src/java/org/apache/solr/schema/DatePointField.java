@@ -229,11 +229,6 @@ public class DatePointField extends PointField implements DateValueFieldType {
     }
 
     @Override
-    protected MutableValueLong newMutableValueLong() {
-      return new MutableValueDate();
-    }
-
-    @Override
     public Date longToObject(long val) {
       return new Date(val);
     }

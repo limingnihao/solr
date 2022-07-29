@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.Map;
 import org.apache.lucene.codecs.Codec;
 import org.apache.lucene.codecs.lucene90.Lucene90StoredFieldsFormat;
-import org.apache.lucene.codecs.lucene91.Lucene91Codec.Mode;
+import org.apache.lucene.codecs.lucene92.Lucene92Codec.Mode;
 import org.apache.lucene.codecs.perfield.PerFieldDocValuesFormat;
 import org.apache.lucene.codecs.perfield.PerFieldPostingsFormat;
 import org.apache.lucene.index.SegmentInfo;

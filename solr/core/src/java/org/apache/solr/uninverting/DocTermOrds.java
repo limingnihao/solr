@@ -808,6 +808,11 @@ public class DocTermOrds implements Accountable {
       return buffer[bufferUpto++];
     }
 
+    @Override
+    public long docValueCount() {
+      return 0;
+    }
+
     /**
      * Buffer must be at least 5 ints long. Returns number of term ords placed into buffer; if this
      * count is less than buffer.length then that is the end.
