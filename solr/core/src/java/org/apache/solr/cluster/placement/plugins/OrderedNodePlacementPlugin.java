@@ -27,6 +27,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -66,7 +67,7 @@ public abstract class OrderedNodePlacementPlugin implements PlacementPlugin {
       Collection<PlacementRequest> requests, PlacementContext placementContext)
       throws PlacementException {
     List<PlacementPlan> placementPlans = new ArrayList<>(requests.size());
-    Set<Node> allNodes = new HashSet<>();
+    Set<Node> allNodes = new LinkedHashSet<>();
     Set<SolrCollection> allCollections = new HashSet<>();
 
     Deque<PendingPlacementRequest> pendingRequests = new ArrayDeque<>(requests.size());
@@ -819,7 +820,7 @@ public abstract class OrderedNodePlacementPlugin implements PlacementPlugin {
       collection = request.getCollection();
       targetNodes = request.getTargetNodes();
       Set<String> shards = request.getShardNames();
-      replicasToPlaceForShards = CollectionUtil.newHashMap(shards.size());
+      replicasToPlaceForShards = CollectionUtil.newLinkedHashMap(shards.size());
       int totalShardReplicas = 0;
       for (Replica.ReplicaType type : Replica.ReplicaType.values()) {
         int count = request.getCountReplicasToCreate(type);

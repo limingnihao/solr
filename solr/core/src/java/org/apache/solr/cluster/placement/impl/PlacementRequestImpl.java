@@ -18,7 +18,7 @@
 package org.apache.solr.cluster.placement.impl;
 
 import java.util.EnumMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import org.apache.solr.cloud.api.collections.Assign;
 import org.apache.solr.cluster.Cluster;
@@ -79,7 +79,7 @@ public class PlacementRequestImpl implements PlacementRequest {
   static PlacementRequestImpl toPlacementRequest(
       Cluster cluster, SolrCollection solrCollection, Assign.AssignRequest assignRequest)
       throws Assign.AssignmentException {
-    Set<String> shardNames = new HashSet<>(assignRequest.shardNames);
+    Set<String> shardNames = new LinkedHashSet<>(assignRequest.shardNames);
     if (shardNames.size() < 1) {
       throw new Assign.AssignmentException(
           "Bad assign request: no shards specified for collection " + solrCollection.getName());
