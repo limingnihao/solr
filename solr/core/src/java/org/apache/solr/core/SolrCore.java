@@ -2270,6 +2270,10 @@ public class SolrCore implements SolrInfoBean, Closeable {
     return getSearcher(forceNew, returnSearcher, waitSearcher, false);
   }
 
+  // TODO: 增加查询线程
+  final ExecutorService queryExecutor =
+      ExecutorUtil.newMDCAwareFixedThreadPool(120, new SolrNamedThreadFactory("queryExecutor"));
+
   /**
    * Opens a new searcher and returns a RefCounted&lt;SolrIndexSearcher&gt; with its reference
    * incremented.
@@ -2375,7 +2379,8 @@ public class SolrCore implements SolrInfoBean, Closeable {
                 true,
                 useCaches,
                 true,
-                directoryFactory);
+                directoryFactory,
+                queryExecutor);
 
       } else {
         // newestSearcher == null at this point
@@ -2395,7 +2400,8 @@ public class SolrCore implements SolrInfoBean, Closeable {
                   true,
                   !realtime,
                   true,
-                  directoryFactory);
+                  directoryFactory,
+                  queryExecutor);
         } else {
           RefCounted<IndexWriter> writer = getSolrCoreState().getIndexWriter(this);
           DirectoryReader newReader = null;
@@ -2414,7 +2420,8 @@ public class SolrCore implements SolrInfoBean, Closeable {
                   true,
                   !realtime,
                   true,
-                  directoryFactory);
+                  directoryFactory,
+                  queryExecutor);
         }
       }
 

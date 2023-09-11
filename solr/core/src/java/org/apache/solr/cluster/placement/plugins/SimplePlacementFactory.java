@@ -18,6 +18,7 @@
 package org.apache.solr.cluster.placement.plugins;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -53,7 +54,7 @@ public class SimplePlacementFactory
         Set<Node> nodes,
         Iterable<SolrCollection> relevantCollections,
         boolean skipNodesWithErrors) {
-      HashMap<Node, WeightedNode> nodeVsShardCount = new HashMap<>();
+      HashMap<Node, WeightedNode> nodeVsShardCount = new LinkedHashMap<>();
 
       for (Node n : nodes) {
         nodeVsShardCount.computeIfAbsent(n, SameCollWeightedNode::new);

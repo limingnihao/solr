@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -110,7 +112,9 @@ class SimpleClusterAbstractionsImpl {
 
     /** Transforms a collection of node names into a set of {@link Node} instances. */
     static Set<Node> getNodes(Collection<String> nodeNames) {
-      return nodeNames.stream().map(NodeImpl::new).collect(Collectors.toSet());
+      return nodeNames.stream()
+          .map(NodeImpl::new)
+          .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     NodeImpl(String nodeName) {
@@ -228,7 +232,7 @@ class SimpleClusterAbstractionsImpl {
      * of {@link Shard}'s, keyed by shard name ({@link Shard#getShardName()}).
      */
     static Map<String, Shard> getShards(SolrCollection solrCollection, Collection<Slice> slices) {
-      Map<String, Shard> shards = new HashMap<>();
+      Map<String, Shard> shards = new LinkedHashMap<>();
 
       for (Slice slice : slices) {
         String shardName = slice.getName();
