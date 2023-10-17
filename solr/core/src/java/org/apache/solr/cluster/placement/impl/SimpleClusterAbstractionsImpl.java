@@ -157,6 +157,7 @@ class SimpleClusterAbstractionsImpl {
 
   static class SolrCollectionImpl implements SolrCollection {
     private final String collectionName;
+
     /** Map from {@link Shard#getShardName()} to {@link Shard} */
     private final Map<String, Shard> shards;
 

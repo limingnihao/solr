@@ -369,7 +369,7 @@ public class Grouping {
       searchWithTimeLimiter(filterQuery, allCollectors);
 
       if (allCollectors instanceof DelegatingCollector) {
-        ((DelegatingCollector) allCollectors).finish();
+        ((DelegatingCollector) allCollectors).complete();
       }
     }
 
@@ -386,8 +386,7 @@ public class Grouping {
     }
 
     if (!collectors.isEmpty()) {
-      Collector secondPhaseCollectors =
-          MultiCollector.wrap(collectors.toArray(new Collector[collectors.size()]));
+      Collector secondPhaseCollectors = MultiCollector.wrap(collectors.toArray(new Collector[0]));
       if (collectors.size() > 0) {
         if (cachedCollector != null) {
           if (cachedCollector.isCached()) {
@@ -410,7 +409,7 @@ public class Grouping {
           searchWithTimeLimiter(filterQuery, secondPhaseCollectors);
         }
         if (secondPhaseCollectors instanceof DelegatingCollector) {
-          ((DelegatingCollector) secondPhaseCollectors).finish();
+          ((DelegatingCollector) secondPhaseCollectors).complete();
         }
       }
     }
