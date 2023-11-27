@@ -1882,6 +1882,26 @@ if [ "${SOLR_ENABLE_STREAM_BODY:-false}" == "true" ]; then
   SCRIPT_SOLR_OPTS+=("-Dsolr.enableStreamBody=true")
 fi
 
+# Parse global circuit breaker env vars and convert to dot separated, lowercase properties
+if [ -n "${SOLR_CIRCUITBREAKER_UPDATE_CPU:-}" ]; then
+  SOLR_OPTS+=("-Dsolr.circuitbreaker.update.cpu=$SOLR_CIRCUITBREAKER_UPDATE_CPU")
+fi
+if [ -n "${SOLR_CIRCUITBREAKER_UPDATE_MEM:-}" ]; then
+  SOLR_OPTS+=("-Dsolr.circuitbreaker.update.mem=$SOLR_CIRCUITBREAKER_UPDATE_MEM")
+fi
+if [ -n "${SOLR_CIRCUITBREAKER_UPDATE_LOADAVG:-}" ]; then
+  SOLR_OPTS+=("-Dsolr.circuitbreaker.update.loadavg=$SOLR_CIRCUITBREAKER_UPDATE_LOADAVG")
+fi
+if [ -n "${SOLR_CIRCUITBREAKER_QUERY_CPU:-}" ]; then
+  SOLR_OPTS+=("-Dsolr.circuitbreaker.query.cpu=$SOLR_CIRCUITBREAKER_QUERY_CPU")
+fi
+if [ -n "${SOLR_CIRCUITBREAKER_QUERY_MEM:-}" ]; then
+  SOLR_OPTS+=("-Dsolr.circuitbreaker.query.mem=$SOLR_CIRCUITBREAKER_QUERY_MEM")
+fi
+if [ -n "${SOLR_CIRCUITBREAKER_QUERY_LOADAVG:-}" ]; then
+  SOLR_OPTS+=("-Dsolr.circuitbreaker.query.loadavg=$SOLR_CIRCUITBREAKER_QUERY_LOADAVG")
+fi
+
 : ${SOLR_SERVER_DIR:=$DEFAULT_SERVER_DIR}
 
 if [ ! -e "$SOLR_SERVER_DIR" ]; then
@@ -2402,10 +2422,10 @@ function start_solr() {
       # Check if entropy is available and pool size is non-zero
       if [[ $entropy_avail -gt 0 && $pool_size -ne 0 ]]; then
         # Compute the ratio of entropy available to pool size
-        ratio=$(awk -v ea="$entropy_avail" -v ps="$pool_size" 'BEGIN {print (ea/ps)*100}')
+        ratio=$(awk -v ea="$entropy_avail" -v ps="$pool_size" 'BEGIN {print int((ea/ps)*100)}')
 
         # Check if the ratio is less than 25%
-        if (( $(echo "$ratio < 25" | bc -l) )); then
+        if (( ratio < 25 )); then
           echo "Warning: Available entropy is low. As a result, use of the UUIDField, SSL, or any other features that require"
           echo "RNG might not work properly. To check for the amount of available entropy, use 'cat /proc/sys/kernel/random/entropy_avail'."
         fi
